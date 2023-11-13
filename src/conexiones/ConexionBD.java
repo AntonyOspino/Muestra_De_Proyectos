@@ -20,7 +20,6 @@ public class ConexionBD {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(
                     URL, USER, CLAVE);
-            System.out.println("base de datos conectada!");
         } catch (Exception e) {
             System.out.println("Error Conectar: "+e.getMessage());
             //e.printStackTrace();
@@ -31,7 +30,6 @@ public class ConexionBD {
         try {
             if(con.isClosed()==false){
                 con.close();
-                System.out.println("base de datos Desconectada!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -235,7 +233,8 @@ public class ConexionBD {
     return lp;
 }
     
-    public void insertarActualizarOpinion(int idProyecto, int idUsuario, String nota, String opinion, boolean esAdministrador) {
+    public void insertarActualizarOpinion(int idProyecto, int idUsuario, String nota, String opinion) {
+
         try {
             // Verificar si ya existe una opinión para el proyecto y usuario
             PreparedStatement consultaExistencia = con.prepareStatement(
@@ -249,8 +248,8 @@ public class ConexionBD {
             int totalOpiniones = resultadoExistencia.getInt("total");
 
             if (totalOpiniones > 0) {
-                // Ya existe una opinión, realizar un UPDATE
-                PreparedStatement consultaUpdate = con.prepareStatement(
+                
+               PreparedStatement consultaUpdate = con.prepareStatement(
                     "UPDATE opinion SET nota = ?, opinion = ? WHERE idproyecto = ? AND idAdministrativo = ?"
                 );
                 consultaUpdate.setInt(1, Integer.parseInt(nota));
@@ -259,9 +258,7 @@ public class ConexionBD {
                 consultaUpdate.setInt(4, idUsuario);
 
                 consultaUpdate.executeUpdate();
-                JOptionPane.showMessageDialog(null,"Registro de opinión actualizado.","informacion",1);
             } else {
-                // No existe una opinión, realizar un INSERT
                 PreparedStatement consultaInsert = con.prepareStatement(
                     "INSERT INTO opinion (idproyecto, idAdministrativo, nota, opinion,estado) VALUES (?, ?, ?, ?, ?)"
                 );
@@ -272,14 +269,12 @@ public class ConexionBD {
                 consultaInsert.setString(5, "ACTIVO");
 
                 consultaInsert.executeUpdate();
-                JOptionPane.showMessageDialog(null,"Nuevo registro de opinión insertado.","informacion",1);
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-}
+    }
+
     public Opiniones obtenerOpinion(int idProyecto, int idUsuario) {
         Opiniones opinion = null;
         try {

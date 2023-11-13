@@ -4,6 +4,9 @@
  */
 package GUIpackage;
 
+import GUIpackage.AdministrativoGUI;
+import GUIpackage.UsuarioGUI;
+import GUIpackage.loginGUI;
 import conexiones.Usuario;
 import java.awt.Color;
 
@@ -48,6 +51,7 @@ public class AdministradorGUI extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         pnlExit = new javax.swing.JPanel();
         btnExit = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -80,19 +84,20 @@ public class AdministradorGUI extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("BIENVENIDO");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 420, 30));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 420, 30));
 
-        jLabel2.setFont(new java.awt.Font("Roboto Medium", 2, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(51, 51, 51));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Por favor seleccione la vista deseada");
         jLabel2.setToolTipText("");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 170, 250, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 420, -1));
 
         btnUsuario.setBackground(new java.awt.Color(0, 204, 205));
         btnUsuario.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         btnUsuario.setForeground(new java.awt.Color(51, 51, 51));
         btnUsuario.setText("VISTA USUARIO");
+        btnUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnUsuarioMouseClicked(evt);
@@ -104,23 +109,47 @@ public class AdministradorGUI extends javax.swing.JFrame {
                 btnUsuarioMouseExited(evt);
             }
         });
-        jPanel1.add(btnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 240, 250, -1));
+        jPanel1.add(btnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 250, -1));
 
-        btnAdministrativo.setText("Vista Administrativa");
+        btnAdministrativo.setBackground(new java.awt.Color(0, 204, 205));
+        btnAdministrativo.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        btnAdministrativo.setForeground(new java.awt.Color(51, 51, 51));
+        btnAdministrativo.setText("VISTA ADMINISTRATIVA");
+        btnAdministrativo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAdministrativo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAdministrativoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnAdministrativoMouseExited(evt);
+            }
+        });
         btnAdministrativo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdministrativoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAdministrativo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 250, -1));
+        jPanel1.add(btnAdministrativo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 270, 250, -1));
 
-        btnCerrarSesion.setText("Cerrar Sesion");
+        btnCerrarSesion.setBackground(new java.awt.Color(255, 102, 102));
+        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        btnCerrarSesion.setForeground(new java.awt.Color(51, 51, 51));
+        btnCerrarSesion.setText("CERRAR SESION");
+        btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarSesionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarSesionMouseExited(evt);
+            }
+        });
         btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCerrarSesionActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 370, 250, -1));
+        jPanel1.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 340, 180, -1));
 
         header.setBackground(new java.awt.Color(255, 255, 255));
         header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -182,6 +211,7 @@ public class AdministradorGUI extends javax.swing.JFrame {
         );
 
         jPanel1.add(header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 30));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, 260, 10));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 450));
 
@@ -236,6 +266,22 @@ public class AdministradorGUI extends javax.swing.JFrame {
         btnUsuario.setBackground(new Color(0,204,205));
     }//GEN-LAST:event_btnUsuarioMouseExited
 
+    private void btnAdministrativoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdministrativoMouseEntered
+        btnAdministrativo.setBackground(new Color(0,150,205));
+    }//GEN-LAST:event_btnAdministrativoMouseEntered
+
+    private void btnAdministrativoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdministrativoMouseExited
+        btnAdministrativo.setBackground(new Color(0,204,205));
+    }//GEN-LAST:event_btnAdministrativoMouseExited
+
+    private void btnCerrarSesionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseEntered
+        btnCerrarSesion.setBackground(new Color(255,55,102));
+    }//GEN-LAST:event_btnCerrarSesionMouseEntered
+
+    private void btnCerrarSesionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseExited
+        btnCerrarSesion.setBackground(new Color(255,102,102));
+    }//GEN-LAST:event_btnCerrarSesionMouseExited
+
     /**
      * @param args the command line arguments
      */
@@ -283,6 +329,7 @@ public class AdministradorGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pnlExit;
     // End of variables declaration//GEN-END:variables
 }

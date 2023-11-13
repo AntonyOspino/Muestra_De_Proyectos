@@ -24,43 +24,13 @@ public class AdministrativoGUI extends javax.swing.JFrame {
     private Usuario user = null;
     private ArrayList<Proyecto> lp;
     String [] notas = {"1","2","3","4","5"};
+    boolean wasEmpty = true;
     /**
      * Creates new form vistaAdministrativoGUI
      */
     public AdministrativoGUI() {
         initComponents();
         this.setLocationRelativeTo(null);
-        resetComboProyecto(cmbProyecto, "Seleccione un proyecto");
-        resetComboNotas(cmbNota,"Seleccione su nota");
-        cmbProyecto.addActionListener((ActionEvent e) -> {
-            String proyectoSeleccionado = (String) cmbProyecto.getSelectedItem();
-
-    if (!(proyectoSeleccionado.equals("Seleccione un proyecto"))) {
-        con.ConectarBD();
-        Proyecto proyecto = obtenerInformacionProyecto(proyectoSeleccionado);
-        actualizarTextArea(proyecto);
-
-        // Obtener y mostrar la opinión existente si la hay
-        int idProyecto = con.ObtenerIdProyecto(proyectoSeleccionado);
-        int idUsuario = user.getId();
-        Opiniones opinion = con.obtenerOpinion(idProyecto, idUsuario);
-
-        if (opinion != null) {
-            cmbNota.setSelectedItem(opinion.getNota());
-            txtAreaComentario.setText(opinion.getOpinion());
-        } else {
-            cmbNota.setSelectedIndex(0); // Selecciona "Seleccione su nota"
-            txtAreaComentario.setText(""); // Limpia el JTextArea
-        }
-
-        con.DesconectarBD();
-    } else {
-        txtAreaProyecto.setText("");
-        // Resetear los componentes si se selecciona "Seleccione un proyecto"
-        resetearComponentes();
-    }
-        });
-
     }
     
     public AdministrativoGUI(Usuario user){
@@ -83,11 +53,13 @@ public class AdministrativoGUI extends javax.swing.JFrame {
         Opiniones opinion = con.obtenerOpinion(idProyecto, idUsuario);
 
         if (opinion != null) {
-            cmbNota.setSelectedItem(opinion.getNota());
+            cmbNota.setSelectedItem(String.valueOf(opinion.getNota()));
             txtAreaComentario.setText(opinion.getOpinion());
+            wasEmpty=false;
         } else {
             cmbNota.setSelectedIndex(0); // Selecciona "Seleccione su nota"
             txtAreaComentario.setText(""); // Limpia el JTextArea
+            wasEmpty=true;
         }
 
         con.DesconectarBD();
@@ -138,6 +110,19 @@ public class AdministrativoGUI extends javax.swing.JFrame {
     cmbNota.setSelectedIndex(0); // Selecciona "Seleccione su nota"
     txtAreaComentario.setText(""); // Limpia el JTextArea
 }
+    
+    private int mostrarDialogoPregunta(String mensaje) {
+    return JOptionPane.showOptionDialog(
+            null,
+            mensaje,
+            "ADMINISTRACION DE PROYECTOS",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            new Object[]{"SÍ", "NO"},
+            "NO"
+    );
+}
 
 
     /**
@@ -160,7 +145,6 @@ public class AdministrativoGUI extends javax.swing.JFrame {
         cmbNota = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAreaComentario = new javax.swing.JTextArea();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -168,6 +152,9 @@ public class AdministrativoGUI extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         pnlExit = new javax.swing.JPanel();
         btnExit = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -176,23 +163,43 @@ public class AdministrativoGUI extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnSalir.setFont(new java.awt.Font("Roboto Medium", 0, 14)); // NOI18N
+        btnSalir.setBackground(new java.awt.Color(255, 102, 102));
+        btnSalir.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(51, 51, 51));
         btnSalir.setText("SALIR");
+        btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSalirMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSalirMouseExited(evt);
+            }
+        });
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 540, 80, -1));
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 530, 140, 40));
 
-        btnGuardarOpinion.setFont(new java.awt.Font("Roboto Medium", 0, 14)); // NOI18N
-        btnGuardarOpinion.setText("Guardar");
+        btnGuardarOpinion.setBackground(new java.awt.Color(0, 204, 205));
+        btnGuardarOpinion.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        btnGuardarOpinion.setForeground(new java.awt.Color(51, 51, 51));
+        btnGuardarOpinion.setText("GUARDAR");
+        btnGuardarOpinion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGuardarOpinion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnGuardarOpinionMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnGuardarOpinionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnGuardarOpinionMouseExited(evt);
+            }
         });
-        jPanel1.add(btnGuardarOpinion, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 540, -1, -1));
+        jPanel1.add(btnGuardarOpinion, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 530, 140, 40));
 
         cmbProyecto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(cmbProyecto, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 160, 180, -1));
@@ -204,7 +211,7 @@ public class AdministrativoGUI extends javax.swing.JFrame {
         txtAreaProyecto.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txtAreaProyecto);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, 450, 260));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 440, 260));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
@@ -212,7 +219,7 @@ public class AdministrativoGUI extends javax.swing.JFrame {
         jLabel1.setText("PROYECTO");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 130, 160, 20));
 
-        jLabel2.setFont(new java.awt.Font("Roboto Light", 2, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(51, 51, 51));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("NOTA");
@@ -233,7 +240,6 @@ public class AdministrativoGUI extends javax.swing.JFrame {
         jScrollPane2.setViewportView(txtAreaComentario);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 240, 280, 260));
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 200, 130, 20));
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 190, 150, 20));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
@@ -325,6 +331,19 @@ public class AdministrativoGUI extends javax.swing.JFrame {
 
         jPanel1.add(header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Opinion del proyecto");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 210, 240, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Detalles del proyecto");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 210, 440, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 100, 610, 10));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1090, 600));
 
         pack();
@@ -376,31 +395,62 @@ public class AdministrativoGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbNotaActionPerformed
 
     private void btnGuardarOpinionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarOpinionMouseClicked
-    // Obtener la información necesaria de los componentes de la interfaz
+        
     String proyectoSeleccionado = (String) cmbProyecto.getSelectedItem();
     String notaSeleccionada = (String) cmbNota.getSelectedItem();
     String opinion = txtAreaComentario.getText();
 
-    // Verificar que se haya seleccionado un proyecto y una nota
-    if (proyectoSeleccionado.equals("Seleccione un proyecto") || notaSeleccionada.equals("Seleccione su nota")) {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un proyecto y una nota antes de guardar la opinión.");
+   
+    if (proyectoSeleccionado.equals("Seleccione un proyecto") || notaSeleccionada.equals("Seleccione su nota") || opinion.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un proyecto y una nota, escriba su opinión antes de poder guardar.","ADMINISTRACION DE PROYECTOS",0);
         return;
     }
-
-    // Obtener el ID del proyecto y del usuario
+    int opcion;
+    if(wasEmpty){
+    opcion = mostrarDialogoPregunta("¿Desea ingresar su opinion?");
+    }
+    else{
+    opcion = mostrarDialogoPregunta("¿Este proyecto ya posee una opinion suya ¿desea actualizarla?");
+    }
+    if(opcion == JOptionPane.YES_OPTION){
     con.ConectarBD();
+ 
     int idProyecto = con.ObtenerIdProyecto(proyectoSeleccionado);
+        
     int idUsuario = user.getId();
+       
     con.DesconectarBD();
-
-    // Llamar al método insertarActualizarOpinion
+        
+  
     con.ConectarBD();
-    con.insertarActualizarOpinion(idProyecto, idUsuario, notaSeleccionada, opinion, user.getIdPerfil()==1);
+       
+    con.insertarActualizarOpinion(idProyecto, idUsuario, notaSeleccionada, opinion);
+      
     con.DesconectarBD();
+       
 
     // Resetear los componentes después de guardar la opinión
+    JOptionPane.showMessageDialog(this, "registro guardado de manera exitosa", "INFORMACION",1);
     resetearComponentes();
+   }
+    
     }//GEN-LAST:event_btnGuardarOpinionMouseClicked
+
+    private void btnSalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseEntered
+        btnSalir.setBackground(new Color(255,55,102));
+    }//GEN-LAST:event_btnSalirMouseEntered
+
+    private void btnSalirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseExited
+        btnSalir.setBackground(new Color(255,102,102));
+    }//GEN-LAST:event_btnSalirMouseExited
+
+    private void btnGuardarOpinionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarOpinionMouseEntered
+        btnGuardarOpinion.setBackground(new Color(0,150,205));
+    }//GEN-LAST:event_btnGuardarOpinionMouseEntered
+
+    private void btnGuardarOpinionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarOpinionMouseExited
+        btnGuardarOpinion.setBackground(new Color(0,204,205));
+    }//GEN-LAST:event_btnGuardarOpinionMouseExited
 
     /**
      * @param args the command line arguments
@@ -431,6 +481,10 @@ public class AdministrativoGUI extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -453,10 +507,12 @@ public class AdministrativoGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pnlExit;
     private javax.swing.JTextArea txtAreaComentario;
     private javax.swing.JTextArea txtAreaProyecto;
